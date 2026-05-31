@@ -2,7 +2,6 @@ import pandas as pd
 
 # Create a dataframe from csv to be able to manipulate data
 df = pd.read_csv("lab 1 - csv.csv", sep=";")
-print(df, "\n") # test print before cleanup
 
 # Clean up some "dirty" data
 df["id"] = df["id"].str.strip() # Remove spaces before/after strings for price...
@@ -11,8 +10,6 @@ df["currency"] = df["currency"].str.strip() # ...and currency
 
 df["price"] = pd.to_numeric(df["price"],errors= "coerce") # Set invalid prices to NaN
 df["created_at"] = pd.to_datetime(df["created_at"], errors="coerce") # Set invalid datetimes to NaT
-
-print(df, "\n") # test print after cleanup
 
 # Collect products with missing id value
 missing_id = df[df["id"].isna()]
@@ -26,16 +23,18 @@ print(missing_name, "\n")
 missing_currency = df[df["currency"].isna()]
 print(missing_currency, "\n")
 
-# Collect producs with invalid prices such as 0 or -50 (free product should be invalid)
+# Collect products with invalid prices such as 0 or -50 (free products should be invalid)
 invalid_prices = df[df["price"] <= 0]
+print(invalid_prices, "\n")
 
 # Rejected products (has any incorrect value)
 rejected_products = df[
-    (df["price"] < 0) |
+    (df["price"] <= 0) |
     (df["id"].isna()) |
     (df["name"].isna())
 ]
-print("rejected: \n", rejected_products, "\n")
+# Export rejected products
+rejected_products.to_csv("output/rejected_products.csv", index=False)
 
 # Collect valid products where name, price, currency values are correct (after cleaning)
 valid_products = df[
@@ -54,6 +53,7 @@ average_price = valid_products["price"].mean()
 median_price = valid_products["price"].median()
 product_count = len(valid_products)
 missing_price_count = df["price"].isna().sum()
+# Missing prices counted from original df as valid products do not have any
 
 # Assemble data into new dataframe
 analytics_summary = pd.DataFrame({

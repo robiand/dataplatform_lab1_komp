@@ -1,0 +1,7 @@
+id,name,price,currency,created_at
+,jacket,-200.0,SEK,
+SKU-1005,,,,
+,hat,,SEK,
+SKU-1014,t-shirt,0.0,SEK,2024-04-10
+SKU-1015,hoodie,-50.0,SEK,2024-04-15
+SKU-1054,,450.0,SEK,2025-02-01
